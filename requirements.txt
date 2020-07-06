@@ -1,3 +1,5 @@
+alabaster==0.7.12
+anaconda-client==1.7.2
 anaconda-navigator==1.9.12
 anaconda-project==0.8.3
 argh==0.26.2
@@ -19,10 +21,10 @@ beautifulsoup4==4.8.2
 bitarray==1.2.1
 bkcharts==0.2
 bleach==3.1.0
-bokeh==2.1.1
+bokeh @ file:///C:/ci/bokeh_1593179283802/work
 boto==2.49.0
 Bottleneck==1.3.2
-certifi==2019.11.28
+certifi==2020.6.20
 cffi==1.14.0
 chardet==3.0.4
 Click==7.0
@@ -30,7 +32,7 @@ cloudpickle==1.3.0
 clyent==1.2.2
 colorama==0.4.3
 comtypes==1.1.7
-conda==4.8.2
+conda==4.8.3
 conda-build==3.18.11
 conda-package-handling==1.6.0
 conda-verify==3.4.2
@@ -227,7 +229,7 @@ tornado==6.0.3
 tqdm==4.42.1
 traitlets==4.3.3
 typed-ast==1.4.1
-typing-extensions==3.7.4.2
+typing-extensions @ file:///tmp/build/80754af9/typing_extensions_1592847887441/work
 ujson==1.35
 unicodecsv==0.14.1
 urllib3==1.25.8

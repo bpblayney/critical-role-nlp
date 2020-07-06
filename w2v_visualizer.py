@@ -7,11 +7,25 @@ from bokeh.models import Circle, MultiLine
 from bokeh.plotting import from_networkx, curdoc
 from bokeh.io import show, output_notebook, reset_output, output_file
 from bokeh.layouts import column
-import ast
+
+def convert_StringList2ListOfInt(string2convert):
+    if string2convert == '[]':
+        return []
+    else:
+        return [int(ele) for ele in string2convert[1:-1].split(',')]
+
+def DataFrame_StringOfInts2ListOfInts(df, cols2convert_list):
+    for column in cols2convert_list:
+        column_temp = column + "_temp"
+        df[column_temp] = df[column].apply(convert_StringList2ListOfInt, 1)
+        df[column] = df[column_temp]
+        df = df.drop(column_temp, axis=1)
+    return df
 
 path = r'D:/Documents/DataScience/Portfolio/criticalrole_webscraper_knowledgegraph/'
 result_df = pd.read_csv(path+'critical-role-nlp/'+'critrole_w2v_model_output.csv')
-result_df['word_most_similar_indices'] = result_df['word_most_similar_indices'].apply(ast.literal_eval)
+result_df = DataFrame_StringOfInts2ListOfInts(result_df, ['word_most_similar_indices'])
+#result_df['word_most_similar_indices'] = result_df['word_most_similar_indices'].apply(ast.literal_eval)
 result_df['coords'] = list(zip(result_df['dim0'], result_df['dim1']))
 
 result_pos = result_df['coords'].to_dict()

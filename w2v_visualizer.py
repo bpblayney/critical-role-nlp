@@ -46,4 +46,4 @@ graph.selection_policy = NodesAndLinkedEdges()
 plot.add_tools(TapTool(), BoxZoomTool(), PanTool(), ResetTool())
 
 #show(plot)
-curdoc().add_root(column(p))
+curdoc().add_root(column(plot))

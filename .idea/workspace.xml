@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8d501fcb-f171-47c0-b3d7-88642c158537" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Untitled.ipynb" afterPath="$PROJECT_DIR$/Untitled.ipynb" />
-    </list>
+    <list default="true" id="8d501fcb-f171-47c0-b3d7-88642c158537" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -16,8 +14,8 @@
       <file leaf-file-name="w2v_visualizer.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/w2v_visualizer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="236">
-              <caret line="32" column="40" lean-forward="true" selection-start-line="32" selection-start-column="40" selection-end-line="32" selection-end-column="40" />
+            <state relative-caret-position="195">
+              <caret line="28" column="69" lean-forward="true" selection-start-line="28" selection-start-column="69" selection-end-line="28" selection-end-column="69" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -140,7 +138,14 @@
       <option name="project" value="LOCAL" />
       <updated>1594048097479</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="relative directory location">
+      <created>1594048673147</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1594048673147</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -175,7 +180,8 @@
     <MESSAGE value="p to plot" />
     <MESSAGE value="some fixes" />
     <MESSAGE value="not using ast anymore" />
-    <option name="LAST_COMMIT_MESSAGE" value="not using ast anymore" />
+    <MESSAGE value="relative directory location" />
+    <option name="LAST_COMMIT_MESSAGE" value="relative directory location" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -184,8 +190,8 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/w2v_visualizer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="236">
-          <caret line="32" column="40" lean-forward="true" selection-start-line="32" selection-start-column="40" selection-end-line="32" selection-end-column="40" />
+        <state relative-caret-position="195">
+          <caret line="28" column="69" lean-forward="true" selection-start-line="28" selection-start-column="69" selection-end-line="28" selection-end-column="69" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
           </folding>

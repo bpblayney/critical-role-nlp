@@ -22,8 +22,8 @@ def DataFrame_StringOfInts2ListOfInts(df, cols2convert_list):
         df = df.drop(column_temp, axis=1)
     return df
 
-path = r'D:/Documents/DataScience/Portfolio/criticalrole_webscraper_knowledgegraph/'
-result_df = pd.read_csv(path+'critical-role-nlp/'+'critrole_w2v_model_output.csv')
+#path = r'D:/Documents/DataScience/Portfolio/criticalrole_webscraper_knowledgegraph/'
+result_df = pd.read_csv('../critrole_w2v_model_output.csv')
 result_df = DataFrame_StringOfInts2ListOfInts(result_df, ['word_most_similar_indices'])
 #result_df['word_most_similar_indices'] = result_df['word_most_similar_indices'].apply(ast.literal_eval)
 result_df['coords'] = list(zip(result_df['dim0'], result_df['dim1']))

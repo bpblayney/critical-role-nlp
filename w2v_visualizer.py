@@ -4,8 +4,9 @@ import networkx as nx
 from bokeh.models import Range1d, Plot, ResetTool, PanTool, ColumnDataSource, LabelSet, TapTool, BoxZoomTool
 from bokeh.models.graphs import NodesAndLinkedEdges
 from bokeh.models import Circle, MultiLine
-from bokeh.plotting import from_networkx
+from bokeh.plotting import from_networkx, curdoc
 from bokeh.io import show, output_notebook, reset_output, output_file
+from bokeh.layouts import column
 
 path = r'D:/Documents/DataScience/Portfolio/criticalrole_webscraper_knowledgegraph/'
 result_df = pd.read_csv(path+'critical-role-nlp/'+'critrole_w2v_model_output.csv')
@@ -17,7 +18,7 @@ G = nx.from_dict_of_lists(result_links)
 
 reset_output()
 #output_notebook()
-output_file('critrole_w2v_visualizer.html')
+#output_file('critrole_w2v_visualizer.html')
 
 # We could use figure here but don't want all the axes and titles
 plot = Plot(x_range=Range1d(-2, 2), y_range=Range1d(-2, 2))
@@ -44,4 +45,5 @@ plot.renderers.append(labels)
 graph.selection_policy = NodesAndLinkedEdges()
 plot.add_tools(TapTool(), BoxZoomTool(), PanTool(), ResetTool())
 
-show(plot)
+#show(plot)
+curdoc().add_root(column(p))

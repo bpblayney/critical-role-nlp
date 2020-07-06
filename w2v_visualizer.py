@@ -7,9 +7,12 @@ from bokeh.models import Circle, MultiLine
 from bokeh.plotting import from_networkx, curdoc
 from bokeh.io import show, output_notebook, reset_output, output_file
 from bokeh.layouts import column
+import ast
 
 path = r'D:/Documents/DataScience/Portfolio/criticalrole_webscraper_knowledgegraph/'
 result_df = pd.read_csv(path+'critical-role-nlp/'+'critrole_w2v_model_output.csv')
+result_df['word_most_similar_indices'] = result_df['word_most_similar_indices'].apply(ast.literal_eval)
+result_df['coords'] = list(zip(result_df['dim0'], result_df['dim1']))
 
 result_pos = result_df['coords'].to_dict()
 result_links = result_df['word_most_similar_indices'].to_dict()
@@ -34,7 +37,7 @@ graph.node_renderer.selection_glyph  = Circle(size=4, fill_color='red', line_alp
 graph.edge_renderer.selection_glyph  = MultiLine(line_color='red', line_alpha=0.8, line_width=3)
 plot.renderers.append(graph)
 
-result_cds = ColumnDataSource(pd.DataFrame({'dim0': result_df.loc[:,'dim0'], 'dim1': result_df.loc[:,'dim1'], 'word': words}))
+result_cds = ColumnDataSource(pd.DataFrame({'dim0': result_df.loc[:,'dim0'], 'dim1': result_df.loc[:,'dim1'], 'word': result_df['word']}))
 labels = LabelSet(x='dim0', y='dim1', text='word',
                   level='glyph', x_offset=0, y_offset=0, source=result_cds, render_mode='canvas',
                   text_font_size="11px", text_font='calibri', text_alpha=1)

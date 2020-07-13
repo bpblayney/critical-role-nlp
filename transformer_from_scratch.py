@@ -13,7 +13,7 @@ class SelfAttention(nn.Module):
         self.heads = heads
         self.head_dim = embed_size // heads
 
-        assert(self.head_dim * heads == embed_size, "Embed size needs to be divisible by heads")
+        assert (self.head_dim * heads == embed_size), "Embed size needs to be divisible by heads"
 
         # First argument to nn.Linear is number of features of each input sample, second argument is number of features of each output sample.
         # Input has shape (N,*,H_in) where H_in = in_features = first argument
@@ -30,14 +30,14 @@ class SelfAttention(nn.Module):
         # Split embedding into self.heads pieces
         values = values.reshape(N, value_len, self.heads, self.head_dim)
         keys = keys.reshape(N, key_len, self.heads, self.head_dim)
-        queries = query.reshape(N, query_len, self.heads, self.head_dim)
+        query = query.reshape(N, query_len, self.heads, self.head_dim)
 
         # send through layers
-        values = self.values(values)
-        keys = self.keys(keys)
-        queries = self.queries(queries)
+        values = self.values(values) # (N, value_len, heads, head_dim)
+        keys = self.keys(keys)  # (N, key_len, heads, head_dim)
+        queries = self.queries(query)  # (N, query_len, heads, heads_dim)
 
-        energy = torch.einsum("nqhd,nkhd-->nhqk",[queries,keys]) #used for matrix multiplication where have several other dimensions
+        energy = torch.einsum("nqhd,nkhd->nhqk", [queries, keys]) #used for matrix multiplication where have several other dimensions
         # queries shape: (N, query_len, heads, heads_dim)
         # keys shape: (N, key_len, heads, heads_dim)
         # energy shape: (N, heads, query_len, key_len)
@@ -48,14 +48,16 @@ class SelfAttention(nn.Module):
         # Attention(Q,K,V) = softmax(QK^T / sqrt(d_k))V
         attention = torch.softmax(energy / (self.embed_size ** (1/2)), dim=3)
 
-        out = torch.einsum("nhql,nlhd-->nqhd",[attention,values]).reshape(
+        out = torch.einsum("nhql,nlhd->nqhd",[attention,values]).reshape(
             N, query_len, self.heads*self.head_dim
         )
         # attention shape: (N, heads, query_len, key_len)
         # values shape: (N, value_len, heads, heads_dim)
         # after einsum (N, query_len, heads, head_dim) then flatten last two dimensions
 
-        out = self.fc_out
+        out = self.fc_out(out)
+        # Linear layer doesn't modify the shape, final shape will be
+        # (N, query_len, embed_size)
         return out
 
 class TransformerBlock(nn.Module):
@@ -111,18 +113,18 @@ class Encoder(nn.Module):
         )
         self.dropout = nn.Dropout(dropout)
 
-        def forward(self, x, mask):
-            N, seq_length = x.shape
-            positions = torch.arange(0,seq_length).expand(N, seq_length).to(self.device)
+    def forward(self, x, mask):
+        N, seq_length = x.shape
+        positions = torch.arange(0,seq_length).expand(N, seq_length).to(self.device)
 
-            out = self.dropout(
-                self.word_embedding(x) + self.position_embedding(positions)
-            )
+        out = self.dropout(
+            self.word_embedding(x) + self.position_embedding(positions)
+        )
 
-            for layer in self.layers:
-                out = layer(out,out,out, mask) # special case in encoder)
+        for layer in self.layers:
+            out = layer(out, out, out, mask) # special case in encoder)
 
-            return out
+        return out
 
 class DecoderBlock(nn.Module):
     def __init__(self,embed_size,heads,forward_expansion,dropout,device):
@@ -136,7 +138,7 @@ class DecoderBlock(nn.Module):
 
     def forward(self, x, value, key, src_mask, trg_mask):
         # src_mask is optional (to ensure don't do unnecessary computations for padded stuff), trg_mask is essential
-        attention = self.attention(x,x,x, trg_mask) # the masked multi-head attention, first in decoder block
+        attention = self.attention(x, x, x, trg_mask) # the masked multi-head attention, first in decoder block
         query = self.dropout(self.norm(attention + x))
         out = self.transformer_block(value, key, query, src_mask)
         return out
@@ -159,8 +161,10 @@ class Decoder(nn.Module):
         self.position_embedding = nn.Embedding(max_length, embed_size)
 
         self.layers = nn.ModuleList(
-            [DecoderBlock(embed_size, heads, forward_expansion, dropout, device)
-             for _ in range(num_layers)]
+            [
+                DecoderBlock(embed_size, heads, forward_expansion, dropout, device)
+                for _ in range(num_layers)
+            ]
         )
 
         self.fc_out = nn.Linear(embed_size, trg_vocab_size)
@@ -198,6 +202,7 @@ class Transformer(nn.Module):
             max_length=100
     ):
         super(Transformer, self).__init__()
+
         self.encoder = Encoder(
             src_vocab_size,
             embed_size,
@@ -206,17 +211,18 @@ class Transformer(nn.Module):
             device,
             forward_expansion,
             dropout,
-            max_length
+            max_length,
         )
 
         self.decoder = Decoder(
             trg_vocab_size,
             embed_size,
             num_layers,
+            heads,
             forward_expansion,
             dropout,
             device,
-            max_length
+            max_length,
         )
 
         self.src_pad_idx = src_pad_idx

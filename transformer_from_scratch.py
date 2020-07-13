@@ -32,6 +32,11 @@ class SelfAttention(nn.Module):
         keys = keys.reshape(N, key_len, self.heads, self.head_dim)
         queries = query.reshape(N, query_len, self.heads, self.head_dim)
 
+        # send through layers
+        values = self.values(values)
+        keys = self.keys(keys)
+        queries = self.queries(queries)
+
         energy = torch.einsum("nqhd,nkhd-->nhqk",[queries,keys]) #used for matrix multiplication where have several other dimensions
         # queries shape: (N, query_len, heads, heads_dim)
         # keys shape: (N, key_len, heads, heads_dim)
@@ -102,7 +107,7 @@ class Encoder(nn.Module):
                     dropout=dropout,
                     forward_expansion = forward_expansion,
                 )
-            ]
+            for _ in range(num_layers)]
         )
         self.dropout = nn.Dropout(dropout)
 
@@ -175,6 +180,7 @@ class Decoder(nn.Module):
             x = layer(x, enc_out, enc_out, src_mask, trg_mask)
 
         out = self.fc_out(x)
+        return out
 
 class Transformer(nn.Module):
     def __init__(
@@ -242,10 +248,10 @@ if __name__ == "__main__":
 
     x = torch.tensor([[1,5,6,4,3,9,5,2,8], [1,8,7,3,4,5,6,7,2]]).to(
         device
-    )
+    ) # two examples
     trg = torch.tensor([[1,7,4,3,5,9,2,0],[1,5,6,2,4,7,6,2]]).to(
         device
-    )
+    ) # target not necessarily same shape
 
     src_pad_idx = 0
     trg_pad_idx = 0
@@ -254,5 +260,5 @@ if __name__ == "__main__":
     model = Transformer(src_vocab_size, trg_vocab_size, src_pad_idx, trg_pad_idx).to(
         device
     )
-    out = model(x, trg[:, :-1])
+    out = model(x, trg[:, :-1]) # shift target by one so it doesn't have end-of-sentence token
     print(out.shape)

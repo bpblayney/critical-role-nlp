@@ -268,3 +268,11 @@ if __name__ == "__main__":
     )
     out = model(x, trg[:, :-1]) # shift target by one so it doesn't have end-of-sentence token
     print(out.shape)
+    print(out[0,0,:])
+
+
+    def count_parameters(model):
+        return sum(p.numel() for p in model.parameters() if p.requires_grad)
+
+
+    print(f'The model has {count_parameters(model):,} trainable parameters')
